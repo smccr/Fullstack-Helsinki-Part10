@@ -1,15 +1,12 @@
 import React from 'react';
 import { View, Pressable, StyleSheet } from 'react-native';
-import { useHistory } from "react-router-dom";
+import { useHistory } from "react-router-native";
 import { Formik } from 'formik';
 import * as yup from 'yup';
 import FormikTextInput from './FormikTextInput';
 import theme from './theme';
 import Text from './Text';
 import useSignIn from '../hooks/useSignIn';
-import AuthStorage from '../utils/authStorage';
-
-const auth = new AuthStorage();
 
 const initialValues = {
   username: '',
@@ -72,7 +69,8 @@ const SignIn = () => {
     const { username, password } = values;
 
     try {
-      const { data } = await signIn({ username, password });
+      const data = await signIn({ username, password });
+      
       if(data) {
         history.push('/');
       }

@@ -61,25 +61,29 @@ const RepositoryItem = (props) => {
           }}
         ></Image>
         <View style={styles.repositoryDescription}>
-          <Text style={styles.bold}>{fullName}</Text>
-          <Text style={styles.paddingY} ellipsizeMode='tail' numberOfLines={2}>{description}</Text>
-          <Text style={[styles.language, styles.paddingY]}>{language}</Text>
+          <Text testID="fullName"style={styles.bold}>{fullName}</Text>
+          <Text testID="description" style={styles.paddingY} ellipsizeMode='tail' numberOfLines={2} >{description}</Text>
+          <Text testID="language" style={[styles.language, styles.paddingY]}>{language}</Text>
         </View>
       </View>
       <View style={styles.containerProps}>
         <RepositoryStat
+          testID="stars"
           name="Stars"
           stat={stargazersCount}
         />
         <RepositoryStat
+          testID="forks"
           name="Forks"
           stat={forksCount}
         />
         <RepositoryStat
+          testID="reviews"
           name="Reviews"
           stat={reviewCount}
         />
         <RepositoryStat
+          testID="rating"
           name="Rating"
           stat={ratingAverage}
         />
@@ -88,7 +92,7 @@ const RepositoryItem = (props) => {
   );
 };
 
-const RepositoryStat = ({ name, stat }) => {
+const RepositoryStat = ({ name, stat, testID }) => {
   const formatNumber = (n) => {
     if (n >= 1000) {
       const newNumber = parseFloat((n / 1000).toFixed(1));
@@ -104,7 +108,7 @@ const RepositoryStat = ({ name, stat }) => {
 
   return (
     <View>
-      <Text style={[styles.bold, styles.center]}>{formatNumber(stat)}</Text>
+      <Text testID={testID} style={[styles.bold, styles.center]}>{formatNumber(stat)}</Text>
       <Text>{name}</Text>
     </View>
   );

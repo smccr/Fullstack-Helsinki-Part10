@@ -32,7 +32,7 @@ const AppBar = () => {
 
   let user;
   if (!loading) {
-    user = data.authorizedUser;
+    user = data?.authorizedUser;
   }
 
   const signOut = async () => {

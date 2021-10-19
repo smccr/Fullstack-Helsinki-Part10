@@ -47,37 +47,23 @@ const SignInForm = ({ onSubmit }) => {
         style={styles.formField}
         name="username"
         placeholder="Username"
+        testID="usernameField"
       />
       <FormikTextInput
         style={styles.formField}
         secureTextEntry
         name="password"
         placeholder="Password"
+        testID="passwordField"
       />
-      <Pressable onPress={onSubmit}>
+      <Pressable onPress={onSubmit} testID="submitButton">
         <Text style={styles.button}>Sign in</Text>
       </Pressable>
     </View>
   );
 };
 
-const SignIn = () => {
-  const [signIn] = useSignIn();
-  const history = useHistory();
-  
-  const onSubmit = async (values) => {
-    const { username, password } = values;
-
-    try {
-      const data = await signIn({ username, password });
-      
-      if(data) {
-        history.push('/');
-      }
-    } catch (e) {
-      console.log(e);
-    }
-  };
+export const SignInContainer = ({ onSubmit }) => {
 
   return (
     <Formik
@@ -89,6 +75,26 @@ const SignIn = () => {
       {({ handleSubmit }) => <SignInForm onSubmit={handleSubmit} />}
     </Formik>
   );
+};
+
+const SignIn = () => {
+  const [signIn] = useSignIn();
+  const history = useHistory();
+
+  const onSubmit = async (values) => {
+    const { username, password } = values;
+
+    try {
+      const data = await signIn({ username, password });
+
+      if (data) {
+        history.push('/');
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+  return <SignInContainer onSubmit={onSubmit} />;
 };
 
 export default SignIn;

@@ -1,5 +1,6 @@
 import React from 'react';
-import { FlatList, View, StyleSheet } from 'react-native';
+import { FlatList, View, StyleSheet, Pressable } from 'react-native';
+import { useHistory } from "react-router-dom";
 
 import RepositoryItem from './RepositoryItem';
 import theme from './theme';
@@ -15,8 +16,11 @@ const styles = StyleSheet.create({
 const ItemSeparator = () => <View style={styles.separator} />;
 
 export const RepositoryListContainer = ({ repositories }) => {
+  const history = useHistory();
   const renderItem = ({item}) => (
-    <RepositoryItem {...item}/>
+    <Pressable onPress={() => history.push(item.id)}>
+      <RepositoryItem {...item}/>
+    </Pressable>
   );
 
   // Get the nodes from the edges array

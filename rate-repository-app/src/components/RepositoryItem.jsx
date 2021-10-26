@@ -1,7 +1,11 @@
 import React from 'react';
-import { View, Image, StyleSheet } from 'react-native';
+import { View, Image, StyleSheet, Pressable } from 'react-native';
+import * as Linking from 'expo-linking';
+import { useParams } from 'react-router-dom';
 import Text from './Text';
 import theme from './theme';
+import useRepository from '../hooks/useRepository';
+
 
 const styles = StyleSheet.create({
   container: {
@@ -41,53 +45,76 @@ const styles = StyleSheet.create({
   },
   language: {
     backgroundColor: theme.colors.primary,
-    color: 'white',
-    textAlign: 'center',
     marginRight: 'auto',
     padding: 8,
+    borderRadius: 5,
+    textAlign: 'center',
+    color: 'white',
+  },
+  button: {
+    backgroundColor: theme.colors.primary,
+    padding: 20,
+    marginTop: 15,
     borderRadius: 5
+  },
+  textWhite: {
+    textAlign: 'center',
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 16
   }
 });
 
 const RepositoryItem = (props) => {
-  const { fullName, description, language, forksCount, stargazersCount, ratingAverage, reviewCount, ownerAvatarUrl } = props;
+  const { fullName, description, language, forksCount, stargazersCount, ratingAverage, reviewCount, ownerAvatarUrl, showButton = false } = props;
+  const { id } = useParams();
+  const { repository } = useRepository(id);
+
+
   return (
     <View style={styles.container}>
       <View style={styles.repositoryHeader}>
         <Image
           style={styles.avatar}
           source={{
-            uri: ownerAvatarUrl
+            uri: ownerAvatarUrl || repository?.ownerAvatarUrl
           }}
         ></Image>
         <View style={styles.repositoryDescription}>
-          <Text testID="fullName"style={styles.bold}>{fullName}</Text>
-          <Text testID="description" style={styles.paddingY} ellipsizeMode='tail' numberOfLines={2} >{description}</Text>
-          <Text testID="language" style={[styles.language, styles.paddingY]}>{language}</Text>
+          <Text testID="fullName" style={styles.bold}>{fullName || repository?.fullName}</Text>
+          <Text testID="description" style={styles.paddingY} ellipsizeMode='tail' numberOfLines={2} >{description || repository?.description}</Text>
+          <Text testID="language" style={[styles.language, styles.paddingY]}>{language || repository?.language}</Text>
         </View>
       </View>
       <View style={styles.containerProps}>
         <RepositoryStat
           testID="stars"
           name="Stars"
-          stat={stargazersCount}
+          stat={stargazersCount || repository?.stargazersCount}
         />
         <RepositoryStat
           testID="forks"
           name="Forks"
-          stat={forksCount}
+          stat={forksCount || repository?.forksCount}
         />
         <RepositoryStat
           testID="reviews"
           name="Reviews"
-          stat={reviewCount}
+          stat={reviewCount || repository?.reviewCount}
         />
         <RepositoryStat
           testID="rating"
           name="Rating"
-          stat={ratingAverage}
+          stat={ratingAverage || repository?.ratingAverage}
         />
       </View>
+      {showButton &&
+        <View style={styles.button}>
+          <Pressable onPress={() => Linking.openURL(repository.url)}>
+            <Text style={styles.textWhite} >Open in GitHub</Text>
+          </Pressable>
+        </View>
+      }
     </View>
   );
 };

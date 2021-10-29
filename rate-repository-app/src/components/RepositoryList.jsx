@@ -23,7 +23,6 @@ export const RepositoryListContainer = ({ repositories }) => {
     </Pressable>
   );
 
-  // Get the nodes from the edges array
   const repositoryNodes = repositories
   ? repositories.edges.map(edge => edge.node)
   : [];

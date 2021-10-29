@@ -1,11 +1,8 @@
 import React from 'react';
 import { View, Image, StyleSheet, Pressable } from 'react-native';
 import * as Linking from 'expo-linking';
-import { useParams } from 'react-router-dom';
 import Text from './Text';
 import theme from './theme';
-import useRepository from '../hooks/useRepository';
-
 
 const styles = StyleSheet.create({
   container: {
@@ -66,10 +63,7 @@ const styles = StyleSheet.create({
 });
 
 const RepositoryItem = (props) => {
-  const { fullName, description, language, forksCount, stargazersCount, ratingAverage, reviewCount, ownerAvatarUrl, showButton = false } = props;
-  const { id } = useParams();
-  const { repository } = useRepository(id);
-
+  const { fullName, description, language, forksCount, stargazersCount, ratingAverage, reviewCount, ownerAvatarUrl, url, showButton = false } = props;
 
   return (
     <View style={styles.container}>
@@ -77,40 +71,40 @@ const RepositoryItem = (props) => {
         <Image
           style={styles.avatar}
           source={{
-            uri: ownerAvatarUrl || repository?.ownerAvatarUrl
+            uri: ownerAvatarUrl
           }}
         ></Image>
         <View style={styles.repositoryDescription}>
-          <Text testID="fullName" style={styles.bold}>{fullName || repository?.fullName}</Text>
-          <Text testID="description" style={styles.paddingY} ellipsizeMode='tail' numberOfLines={2} >{description || repository?.description}</Text>
-          <Text testID="language" style={[styles.language, styles.paddingY]}>{language || repository?.language}</Text>
+          <Text testID="fullName" style={styles.bold}>{fullName}</Text>
+          <Text testID="description" style={styles.paddingY} ellipsizeMode='tail' numberOfLines={2} >{description}</Text>
+          <Text testID="language" style={[styles.language, styles.paddingY]}>{language}</Text>
         </View>
       </View>
       <View style={styles.containerProps}>
         <RepositoryStat
           testID="stars"
           name="Stars"
-          stat={stargazersCount || repository?.stargazersCount}
+          stat={stargazersCount}
         />
         <RepositoryStat
           testID="forks"
           name="Forks"
-          stat={forksCount || repository?.forksCount}
+          stat={forksCount}
         />
         <RepositoryStat
           testID="reviews"
           name="Reviews"
-          stat={reviewCount || repository?.reviewCount}
+          stat={reviewCount}
         />
         <RepositoryStat
           testID="rating"
           name="Rating"
-          stat={ratingAverage || repository?.ratingAverage}
+          stat={ratingAverage}
         />
       </View>
       {showButton &&
         <View style={styles.button}>
-          <Pressable onPress={() => Linking.openURL(repository.url)}>
+          <Pressable onPress={() => Linking.openURL(url)}>
             <Text style={styles.textWhite} >Open in GitHub</Text>
           </Pressable>
         </View>
@@ -140,6 +134,5 @@ const RepositoryStat = ({ name, stat, testID }) => {
     </View>
   );
 };
-
 
 export default RepositoryItem;

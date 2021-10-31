@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { View, StyleSheet, Text, Pressable, ScrollView } from 'react-native';
 import { Link } from "react-router-native";
 import Constants from 'expo-constants';
@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
 });
 
 const AppBar = () => {
-  const { data, error, loading } = useQuery(GET_AUTHORIZED_USER, {
+  const { data, loading } = useQuery(GET_AUTHORIZED_USER, {
     fetchPolicy: 'cache-and-network'
   });
 
@@ -47,6 +47,13 @@ const AppBar = () => {
           <Link to="/">
             <Text style={styles.text}>Repositories</Text>
           </Link>
+        </Pressable>
+        <Pressable>
+          {user && 
+          <Link to="/createReview">
+            <Text style={styles.text}>Create a review</Text>
+          </Link>
+          }
         </Pressable>
         <Pressable>
           {!user ?

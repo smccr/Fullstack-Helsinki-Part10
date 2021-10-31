@@ -3,8 +3,8 @@ import { FlatList, View, StyleSheet, Pressable } from 'react-native';
 import { useHistory } from "react-router-dom";
 
 import RepositoryItem from './RepositoryItem';
-import theme from './theme';
-import useRepositories from '../hooks/useRepositories';
+import theme from '../theme';
+import useRepositories from '../../hooks/useRepositories';
 
 const styles = StyleSheet.create({
   separator: {

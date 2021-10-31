@@ -4,8 +4,8 @@ import { useParams } from "react-router-dom";
 import { format } from 'date-fns';
 
 import RepositoryItem from './RepositoryItem';
-import theme from './theme';
-import useRepository from '../hooks/useRepository';
+import theme from '../theme';
+import useRepository from '../../hooks/useRepository';
 
 const styles = StyleSheet.create({
   container: {

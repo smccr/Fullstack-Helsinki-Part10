@@ -3,11 +3,18 @@ import { GET_REPOSITORIES } from '../graphql/queries';
 
 const useRepositories = () => {
 
-  const { data, error, loading } = useQuery(GET_REPOSITORIES, {
+  const { data, error, loading, refetch } = useQuery(GET_REPOSITORIES, {
     fetchPolicy: 'cache-and-network'
   });
 
-  return { repositories : data?.repositories, loading, error };
+  const fetch = (orderBy, orderDirection) => {
+    refetch({
+      orderBy: orderBy,
+      orderDirection: orderDirection,
+    });
+  };
+
+  return { repositories: data?.repositories, loading, error, fetch };
 };
 
 export default useRepositories;

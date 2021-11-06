@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { FlatList, View, StyleSheet, Pressable } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
-
+import { Searchbar } from 'react-native-paper';
+import { useDebouncedCallback } from 'use-debounce';
 import { useHistory } from "react-router-dom";
 
 import RepositoryItem from './RepositoryItem';
@@ -20,18 +21,47 @@ const styles = StyleSheet.create({
   }
 });
 
+const Header = ({ fetch, selectedSort, setSelectedSort, searchQuery, setSearchQuery }) => {
+  return (
+    <View>
+      <SearchField fetch={fetch} searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+      <SortPicker fetch={fetch} selectedSort={selectedSort} setSelectedSort={setSelectedSort} />
+    </View>
+  );
+};
+
+const SearchField = ({ searchQuery, setSearchQuery, fetch }) => {
+  const debounced = useDebouncedCallback((value) => {
+    fetch({ searchKeyword: value });
+  }, 500);
+
+  const onChangeSearch = query => {
+    setSearchQuery(query);
+    debounced(query);
+  };
+
+  return (
+    <Searchbar
+      placeholder="Search"
+      onChangeText={onChangeSearch}
+      value={searchQuery}
+    />
+  );
+};
+
+
 const SortPicker = ({ fetch, selectedSort, setSelectedSort }) => {
-  
+
   const handleValue = (itemValue) => {
     switch (itemValue) {
       case 'latest':
-        fetch('CREATED_AT', 'DESC');
+        fetch({ orderBy: 'CREATED_AT', orderDirection: 'DESC' });
         break;
       case 'highest':
-        fetch('RATING_AVERAGE', 'ASC');
+        fetch({ orderBy: 'RATING_AVERAGE', orderDirection: 'ASC' });
         break;
       case 'lowest':
-        fetch('RATING_AVERAGE', 'DESC');
+        fetch({ orderBy: 'RATING_AVERAGE', orderDirection: 'DESC' });
         break;
     }
   };
@@ -59,6 +89,7 @@ const ItemSeparator = () => <View style={styles.separator} />;
 export const RepositoryListContainer = ({ repositories, fetch }) => {
   const history = useHistory();
   const [selectedSort, setSelectedSort] = useState();
+  const [searchQuery, setSearchQuery] = useState('');
 
   const renderItem = ({ item }) => (
     <Pressable onPress={() => history.push(item.id)}>
@@ -73,7 +104,15 @@ export const RepositoryListContainer = ({ repositories, fetch }) => {
   return (
     <FlatList
       data={repositoryNodes}
-      ListHeaderComponent={() => <SortPicker fetch={fetch} selectedSort={selectedSort} setSelectedSort={setSelectedSort}/>}
+      ListHeaderComponent={
+        <Header
+          fetch={fetch}
+          selectedSort={selectedSort}
+          setSelectedSort={setSelectedSort}
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+        />
+      }
       ItemSeparatorComponent={ItemSeparator}
       renderItem={renderItem}
       keyExtractor={item => item.id}

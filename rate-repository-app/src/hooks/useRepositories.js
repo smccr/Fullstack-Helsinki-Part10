@@ -7,10 +7,11 @@ const useRepositories = () => {
     fetchPolicy: 'cache-and-network'
   });
 
-  const fetch = (orderBy, orderDirection) => {
+  const fetch = ({ orderBy, orderDirection, searchKeyword }) => {
     refetch({
       orderBy: orderBy,
       orderDirection: orderDirection,
+      searchKeyword: searchKeyword
     });
   };
 

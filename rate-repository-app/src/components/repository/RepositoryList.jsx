@@ -86,7 +86,7 @@ const SortPicker = ({ fetch, selectedSort, setSelectedSort }) => {
 
 const ItemSeparator = () => <View style={styles.separator} />;
 
-export const RepositoryListContainer = ({ repositories, fetch }) => {
+export const RepositoryListContainer = ({ repositories, fetch, onEndReach }) => {
   const history = useHistory();
   const [selectedSort, setSelectedSort] = useState();
   const [searchQuery, setSearchQuery] = useState('');
@@ -117,13 +117,23 @@ export const RepositoryListContainer = ({ repositories, fetch }) => {
       renderItem={renderItem}
       keyExtractor={item => item.id}
       testID="nodesList"
+      onEndReached={onEndReach}
+      onEndReachedThreshold={0.5}
     />
   );
 };
 
 const RepositoryList = () => {
-  const { repositories, fetch } = useRepositories();
-  return <RepositoryListContainer repositories={repositories} fetch={fetch} />;
+  const { repositories, fetch, fetchMore } = useRepositories({
+    first: 10
+  });
+
+  const onEndReach = () => {
+    fetchMore();
+    console.log('You have reached the end of the list');
+  };
+  
+  return <RepositoryListContainer repositories={repositories} fetch={fetch} onEndReach={onEndReach}/>;
 };
 
 export default RepositoryList;

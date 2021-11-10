@@ -16,8 +16,10 @@ const styles = StyleSheet.create({
   },
   text: {
     color: 'white',
-    paddingLeft: 15,
-    paddingBottom: 20
+    paddingLeft: 7,
+    paddingRight: 7,
+    paddingTop: 10,
+    paddingBottom: 10
   }
 });
 

@@ -102,7 +102,6 @@ const Review = () => {
     try {
       const data = await createReview(values);
       if (data) {
-        console.log('data', data);
         history.push(`/${data.createReview.repositoryId}`);
       }
     }

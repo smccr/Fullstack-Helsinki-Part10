@@ -2,9 +2,9 @@ import React from 'react';
 import { View, StyleSheet, Text, Pressable, ScrollView } from 'react-native';
 import { Link } from "react-router-native";
 import Constants from 'expo-constants';
-import { useQuery, useApolloClient } from '@apollo/client';
-import { GET_AUTHORIZED_USER } from '../graphql/queries';
+import { useApolloClient } from '@apollo/client';
 import useAuthStorage from '../hooks/useAuthStorage';
+import useAuthorization from '../hooks/useAuthorization';
 import theme from './theme';
 
 const styles = StyleSheet.create({
@@ -23,19 +23,12 @@ const styles = StyleSheet.create({
   }
 });
 
-const AppBar = () => {
-  const { data, loading } = useQuery(GET_AUTHORIZED_USER, {
-    fetchPolicy: 'cache-and-network'
-  });
+const AppBar = () => { 
+  const { data: user } = useAuthorization();
 
   const authStorage = useAuthStorage();
 
   const apolloClient = useApolloClient();
-
-  let user;
-  if (!loading) {
-    user = data?.authorizedUser;
-  }
 
   const signOut = async () => {
     await authStorage.removeAccessToken();
@@ -54,6 +47,13 @@ const AppBar = () => {
           {user && 
           <Link to="/createReview">
             <Text style={styles.text}>Create a review</Text>
+          </Link>
+          }
+        </Pressable>
+        <Pressable>
+          {user && 
+          <Link to="/myReviews">
+            <Text style={styles.text}>My reviews</Text>
           </Link>
           }
         </Pressable>

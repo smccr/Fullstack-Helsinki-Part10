@@ -7,6 +7,7 @@ import AppBar from './AppBar';
 import RepositoryList from './repository/RepositoryList';
 import SingleRepository from './repository/SingleRepository';
 import ReviewForm from './repository/ReviewForm';
+import MyReviews from './repository/MyReviews';
 import SignIn from './auth/SignIn';
 import SignUp from './auth/SignUp';
 
@@ -34,6 +35,9 @@ const Main = () => {
         </Route>
         <Route path="/createReview" exact>
           <ReviewForm />
+        </Route>
+        <Route path="/myReviews" exact>
+          <MyReviews />
         </Route>
         <Route path="/:id">
           <SingleRepository />
